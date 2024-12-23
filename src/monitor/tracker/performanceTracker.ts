@@ -52,18 +52,13 @@ export class PerformanceTracker extends TrackerBase {
 
   public getPerformance() {
     return {
-      fp: this.fp,
-      fcp: this.fcp,
-      fmp: this.fmp,
-      pdt: this.pdt,
-      // ttfb: this.ttfb,
-      // lcp: this.lcp,
-      dcl: this.dcl,
-      // l: this.l,
-      ttl: this.ttl,
-      // fid: this.fid,
-      ua: this.ua,
-      url: this.url,
+      FP: this.fp,
+      FCP: this.fcp,
+      FMP: this.fmp,
+      PDT: this.pdt,
+      DCL: this.dcl,
+      TTL: this.ttl,
+      URL: this.url,
     }
   }
 }

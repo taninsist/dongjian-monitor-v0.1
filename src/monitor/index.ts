@@ -1,11 +1,9 @@
-import { PerformanceTracker } from "./tracker/index"
+import { PerformanceTracker } from "./tracker/index";
 import { ErrorTracker } from "./tracker/errorTracker";
 import { BusinessTracker } from "./tracker/businessTracker";
 
 import { isDev } from "../utils/share";
-
-
-
+import { Reporter } from "./reporter";
 
 /*
   demo
@@ -25,15 +23,19 @@ import { isDev } from "../utils/share";
 
 export interface IMonitorOptions {
   appId: string;
-  SecretKey: string;
+  secretKey: string;
 }
 
-
-export class DongJianMonitor {
+export class DongJianMonitor extends Reporter {
   private appId: string;
   private SecretKey: string;
   private static instance: DongJianMonitor;
   constructor(options: IMonitorOptions) {
+    super({
+      appId: options.appId,
+      secretKey: options.secretKey,
+      // reportUrl: options.reportUrl,
+    });
     this.appId = options.appId;
     this.SecretKey = options.SecretKey;
   }
@@ -46,17 +48,16 @@ export class DongJianMonitor {
   protected performanceTracker() {
     // 性能监控
     const performan = new PerformanceTracker();
-    console.log('performan', performan.getPerformance());
+    this.performanceReporter(performan.getPerformance());
+    // console.log('performan', performan.getPerformance());
   }
 
   protected businessTracker() {
     // 商业监控
     const business = new BusinessTracker();
   }
-  
 
   static init(options: IMonitorOptions) {
-
     if (this.instance) {
       return this.instance;
     }
@@ -64,7 +65,6 @@ export class DongJianMonitor {
     this.instance = new DongJianMonitor(options);
 
     window.addEventListener(isDev ? "load" : "unload", () => {
-
       // 稳定性监控
       this.instance.stabilityTracker();
 
@@ -73,9 +73,8 @@ export class DongJianMonitor {
 
       // 商业监控
       this.instance.businessTracker();
-    })
+    });
 
     return this.instance;
   }
-
 }
